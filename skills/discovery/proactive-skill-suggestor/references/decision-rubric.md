@@ -4,8 +4,17 @@ Use this after hub inspect, not before.
 
 ## Recurring vs one-off
 
-Recurring: same job class appears in ≥2 sessions, or one long session that
-clearly continues. One-off: a single question that already completed.
+Scout it when any of these hold:
+
+- same job class in ≥2 sessions (`qualify: recurring`)
+- one session with ≥20 tool calls or ≥12 messages (`qualify: heavy`)
+- a loaded local skill whose job the hub might cover better (upgrade pass)
+
+One-off (skip): greeting, format test, or a tiny finished lookup with no
+loaded skills and no heavy tool use.
+
+Do **not** skip Shopify-class work, Discord ops, or other real product jobs
+just because they appeared once.
 
 ## Incumbent match
 

@@ -1,10 +1,8 @@
 #!/usr/bin/env python3
-import json
-import sqlite3
+import importlib.util
 import tempfile
 import unittest
 from pathlib import Path
-import importlib.util
 
 ROOT = Path(__file__).resolve().parents[1]
 SPEC = importlib.util.spec_from_file_location(
@@ -21,19 +19,34 @@ class MineTests(unittest.TestCase):
         self.assertIn("stripe", toks)
         self.assertIn("webhook", toks)
         self.assertNotIn("please", toks)
+        self.assertNotIn("exactly", mod.title_tokens("Reply exactly lane B ready"))
 
-    def test_cluster_and_catalog(self):
+    def test_cluster_keeps_single_heavy_shopify_session(self):
         sessions = [
-            {"id": "a", "title": "Stripe webhook triage"},
-            {"id": "b", "title": "Stripe webhook retry"},
-            {"id": "c", "title": "Hello there"},
+            {
+                "id": "a",
+                "title": "Shopify access for trimsulin-revamp",
+                "cwd": "/tmp/trimsulin-revamp",
+                "tool_call_count": 40,
+                "message_count": 20,
+            },
+            {"id": "b", "title": "Hello there", "tool_call_count": 1, "message_count": 2},
         ]
-        skills = {"a": ["stripe-webhook-triage"], "b": ["stripe-webhook-triage"]}
-        classes = mod.cluster_classes(sessions, skills, max_classes=5)
-        self.assertGreaterEqual(len(classes), 1)
-        labels = " ".join(c["label"].lower() for c in classes)
-        self.assertIn("stripe", labels)
+        skills = {"a": ["shopify-theme-operations"]}
+        user_tokens = {"a": ["shopify", "theme", "preview"]}
+        classes = mod.cluster_classes(sessions, skills, user_tokens, max_classes=8)
+        labels = " ".join(c["label"] for c in classes)
+        self.assertIn("shopify", labels)
+        shop = next(c for c in classes if "shopify" in c["label"])
+        self.assertTrue(any("shopify" in q for q in shop["hub_queries"]))
+        self.assertIn(shop["qualify"], {"heavy", "recurring", "single"})
 
+    def test_hub_queries_include_synonyms(self):
+        qs = mod.hub_queries_for_class("shopify", ["shopify"], ["shopify-theme-operations"])
+        self.assertIn("shopify", qs)
+        self.assertTrue(any(q.endswith("api") or q.endswith("admin") for q in qs))
+
+    def test_catalog(self):
         with tempfile.TemporaryDirectory() as td:
             skill_dir = Path(td) / "stripe-webhook-triage"
             skill_dir.mkdir()

@@ -1,7 +1,7 @@
 ---
 name: proactive-skill-suggestor
-description: Use when scouting Skills Hub from recent Hermes work. High-bar search; upgrade similar local skills instead of installing duplicates.
-version: 1.0.0
+description: Use when scouting Skills Hub from recent Hermes work. Aggressive search; upgrade similar local skills instead of installing duplicates.
+version: 1.1.0
 author: btcjon
 license: MIT
 metadata:
@@ -34,10 +34,11 @@ local skill. Never install, patch, enable, or publish without an explicit ask.
 | Knob | Default | Why |
 |---|---|---|
 | Window | **72 hours**, recency-weighted | 24h is one-off noise; 7d re-litigates old themes |
-| Delivery | Silence unless ≥1 high-bar match | Empty cron ticks must send nothing |
-| Cap | **3 suggestions** per run | Prompt-budget and keep-list already hurt |
+| Delivery | Silence unless ≥1 inspect-backed match | Empty cron ticks must send nothing |
+| Cap | **5 suggestions** per run | Aggressive hunt, still bounded |
 | Mutation | **None** | Suggest; wait for an explicit install/patch ask |
 | Similar local skill | **Upgrade/merge incumbent** | Do not add a second skill for the same job |
+| Single heavy session | **Still scout it** | High tool-call work is not "one-off curiosity" |
 
 Scheduled runs must assume Hermes cron's **3-minute interrupt**. Run the miner
 script first. Only spend model time on the work-class JSON, not raw transcripts.
@@ -47,21 +48,24 @@ script first. Only spend model time on the work-class JSON, not raw transcripts.
 Shallow name-match against 80k+ hub skills will always "find something." That
 is a fail. A recommendation is only valid if you did all of this:
 
-1. **Work classes, not keywords.** Run
-   `python3 scripts/mine_session_themes.py --hours 72`.
-   Use at most **5** classes. Drop one-off greetings, status pings, and
-   already-solved lookups.
-2. **Two or three hub queries per class**, specific then synonym
-   (`hermes skills search --json "<query>"`). Do not stop at the first page hit.
-3. **Inspect 2–3 finalists** with `hermes skills inspect <id>`. Name similarity
-   is not evidence.
-4. **Subtract the local catalog** using miner `local_skills` plus
-   `skill_view` / `hermes skills list` for close names. Match on name, slug,
-   and description job — not exact string only.
-5. **Classify** each finalist (see rubric). Inspect the incumbent `SKILL.md`
-   before calling something net-new.
-6. **Stop** if nothing clears the bar. Output nothing (cron) or `no_suggestions`
-   (interactive).
+1. **Work classes from titles, cwd, first-prompt tokens, and loaded skills.**
+   Run `python3 scripts/mine_session_themes.py --hours 72` (default 8 classes).
+   Drop greetings and format tests. Keep a **single heavy session**
+   (`qualify: heavy`) — do not skip it as one-off.
+2. **Search the hub hard.** Prefer
+   `python3 scripts/search_hub.py --mine-json <miner.json>` which fires the
+   generated `hub_queries` (task, `cli`, `api`, `workflow`, `admin`). If a
+   query returns nothing, the next synonym still runs. Do not stop at the
+   first empty search.
+3. **Inspect 2–3 finalists per live class** with `hermes skills inspect <id>`.
+   Prefer `trust_level: official`, then community with a real SKILL.md body.
+   Name similarity is not evidence.
+4. **Subtract the local catalog**, then hunt **upgrades** of skills already
+   loaded this window. Same job + material delta → `upgrade-incumbent`.
+5. **Classify** (see rubric). Inspect the incumbent `SKILL.md` before
+   `net-new`.
+6. **Stop** only if every inspected hit is a restatement of a local skill
+   with no delta. Output nothing (cron) or `no_suggestions` (interactive).
 
 Hub is the install source of truth (`hermes skills search/inspect/install`).
 Do not bypass it with skills.sh, SkillsMP, or `npx skills`. ClawHub is
@@ -72,9 +76,9 @@ fallback/reference only.
 | Class | When | Action |
 |---|---|---|
 | `upgrade-incumbent` | Local skill already owns the job; hub has a **material delta** | Propose merge into the incumbent. Quote the missing commands, APIs, pitfalls, or current docs. Do **not** install a sibling. |
-| `net-new` | No local skill covers the job, inspect passed, recurring work class | Propose `hermes skills inspect` + `install` as a command, unexecuted. |
+| `net-new` | No local skill covers the job; inspect passed; class is recurring **or heavy** | Propose `hermes skills inspect` + `install` unexecuted. |
 | `reject-duplicate` | Local skill already covers it; hub adds branding or restates the same steps | Skip. Name the incumbent. |
-| `skip-one-off` | Single session, curiosity, or already finished | Skip. |
+| `skip-one-off` | Tiny session, greeting, or format test. Not heavy work. | Skip. |
 | `skip-bloat` | Would grow the keep-list for a job the catalog already routes | Skip. |
 
 **Material delta** means at least one of: newer API/CLI than the incumbent,
@@ -97,9 +101,9 @@ when the user says to patch that named skill.
 ## Workflow
 
 1. Mine themes (`scripts/mine_session_themes.py`). If `work_classes` is empty, stop.
-2. For each class, search hub (2–3 queries), inspect 2–3 finalists.
-3. Load close local incumbents with `skill_view`.
-4. Classify. Keep at most 3 suggestions, upgrades first when the job is already owned.
+2. Run `scripts/search_hub.py --mine-json ...` (or equivalent hub searches).
+3. Inspect 2–3 finalists per live class. Load close incumbents with `skill_view`.
+4. Classify. Keep at most 5 suggestions, upgrades first when the job is already owned.
 5. Write a local receipt under `receipts/` (gitignored) if the user asked for a dry-run.
 6. Deliver only if there is at least one `upgrade-incumbent` or `net-new`.
 

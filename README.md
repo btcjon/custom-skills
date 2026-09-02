@@ -26,8 +26,10 @@ Load with `skill_view(name="proactive-skill-suggestor")` in a new session.
 ## Scout once (no cron)
 
 ```bash
-python3 skills/discovery/proactive-skill-suggestor/scripts/mine_session_themes.py --hours 72
-# Agent follows skills/discovery/proactive-skill-suggestor/SKILL.md against that JSON.
+python3 skills/discovery/proactive-skill-suggestor/scripts/mine_session_themes.py --hours 72 \
+  > /tmp/mine.json
+python3 skills/discovery/proactive-skill-suggestor/scripts/search_hub.py --mine-json /tmp/mine.json
+# Agent inspects top hits per SKILL.md. Suggest only.
 ```
 
 Empty output means silence. Suggestions are a proposal, not a mutation.
