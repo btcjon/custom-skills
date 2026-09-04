@@ -1,0 +1,6 @@
+interface:
+  display_name: "Gmail Triage"
+  short_description: "Classify and clean Gmail through Composio"
+  default_prompt: "Use $gmail-triage to review my Gmail and prepare a safe cleanup batch."
+policy:
+  allow_implicit_invocation: true

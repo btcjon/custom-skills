@@ -15,6 +15,7 @@ skills/
 Current categories:
 
 - `discovery/` — finding, ranking, and suggesting skills
+- `email/` — email triage, review, and mailbox hygiene
 
 Rules:
 
