@@ -1,0 +1,16 @@
+{"id": "f001", "thread_id": "t001", "from_address": "Example News <news@example.com>", "date": "2026-09-03T12:00:00Z", "labels": ["INBOX", "UNREAD"], "list_unsubscribe": "<https://list.example.com/u?id=1,2>, <mailto:leave@example.com>", "list_unsubscribe_post": "List-Unsubscribe=One-Click"}
+{"id": "f002", "thread_id": "t002", "from_address": "news@example.com", "from_name": "Example News", "date": "2026-08-28T09:30:00Z", "labels": ["INBOX", "UNREAD"]}
+{"id": "f003", "thread_id": "t003", "from_address": "news@example.com", "date": 1755000000, "labels": ["INBOX"]}
+{"id": "f004", "thread_id": "t004", "from_address": "news@example.com", "date": "Tue, 12 Aug 2026 08:15:00 -0400", "labels": []}
+{"id": "f004", "thread_id": "t004", "from_address": "news@example.com", "date": "Tue, 12 Aug 2026 08:15:00 -0400", "labels": []}
+{"id": "f005", "thread_id": "t005", "from_address": "Shop Deals <deals@shop.example.net>", "date": "2026-09-02T16:45:00Z", "labels": ["INBOX", "UNREAD"], "list_unsubscribe": ["mailto:unsub@shop.example.net"]}
+{"id": "f006", "thread_id": "t006", "from_address": "deals@shop.example.net", "date": "2026-08-30T16:45:00Z", "labels": ["INBOX", "UNREAD"], "list_unsubscribe": ["mailto:unsub@shop.example.net"]}
+{"id": "f007", "thread_id": "t007", "from_address": "deals@shop.example.net", "date": "2026-08-21T16:45:00Z", "labels": ["INBOX"]}
+{"id": "f008", "thread_id": "t008", "from_address": "App Updates <updates@app.example.org>", "date": "2026-09-01T11:00:00Z", "labels": ["INBOX"], "List-Unsubscribe": "<https://app.example.org/preferences>"}
+{"id": "f009", "thread_id": "t009", "from_address": "updates@app.example.org", "date": "2026-08-25T11:00:00Z", "labels": ["INBOX", "UNREAD"], "List-Unsubscribe": "<https://app.example.org/preferences>"}
+{"id": "f010", "thread_id": "t010", "from_address": "Shop Billing <billing@shop.example.com>", "date": "2026-09-01T07:00:00Z", "labels": ["INBOX"]}
+{"id": "f011", "thread_id": "t011", "from_address": "billing@shop.example.com", "date": "2026-08-18T07:00:00Z", "labels": ["INBOX"]}
+{"id": "f012", "thread_id": "t012", "from_address": "Team Lead <lead@example.org>", "date": "2026-09-03T18:20:00Z", "labels": ["INBOX", "IMPORTANT"]}
+{"id": "f013", "thread_id": "t013", "from_address": "lead@example.org", "date": "2026-08-29T18:20:00Z", "labels": ["INBOX", "STARRED"]}
+{"id": "f014", "thread_id": "t014", "from_address": "once@example.net", "date": "2026-08-27T13:00:00Z", "labels": ["INBOX"]}
+{"id": "f015", "thread_id": "t015", "from_address": "not-a-parsable-sender", "date": "2026-08-26T13:00:00Z", "labels": ["INBOX"]}

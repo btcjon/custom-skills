@@ -1,6 +1,8 @@
 interface:
   display_name: "Gmail Triage"
-  short_description: "Classify and clean Gmail through Composio"
+  short_description: "Triage, clean up, and unsubscribe Gmail through Composio"
   default_prompt: "Use $gmail-triage to review my Gmail and prepare a safe cleanup batch."
 policy:
+  # Discovery stays implicit; every mailbox mutation still needs an explicit
+  # per-sender selection at execution time.
   allow_implicit_invocation: true

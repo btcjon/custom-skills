@@ -8,6 +8,23 @@ venv/
 receipts/
 *.db
 *.sqlite
+*.sqlite3
 .hermes/
 .idea/
 .vscode/
+
+# Gmail Triage runtime artifacts: mailbox-derived data and local audit state
+# never belong in this public repository.
+.gmail-triage/
+gmail-triage-state.*
+state/
+normalized*.jsonl
+messages*.jsonl
+candidates*.json
+plan*.json
+results*.json
+selected*.txt
+live-filters*.json
+profile*.json
+*.url
+!skills/email/gmail-triage/fixtures/*

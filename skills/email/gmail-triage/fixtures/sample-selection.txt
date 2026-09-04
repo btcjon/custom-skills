@@ -1,0 +1,9 @@
+# One line per exact sender the user selected: address [action]
+# Actions: unsubscribe_only, archive_label, trash,
+#          unsubscribe_and_archive_label, unsubscribe_and_trash
+# Omit the action to use the account's default_action preference.
+news@example.com unsubscribe_and_archive_label
+deals@shop.example.net trash
+updates@app.example.org unsubscribe_only
+billing@shop.example.com archive_label
+ghost@example.com archive_label
